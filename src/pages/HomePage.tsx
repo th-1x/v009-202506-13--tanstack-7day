@@ -5,7 +5,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>🏠 หน้าแรก (Home Page)</h1>
-      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query!</p>
+      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations!</p>
 
       {/* Day 1 Summary */}
       <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
@@ -16,6 +16,39 @@ const HomePage: React.FC = () => {
           <li>✅ createBrowserRouter: การตั้งค่า Router</li>
           <li>✅ Component พื้นฐาน: RouterProvider, Link, Outlet</li>
         </ul>
+      </div>
+
+      {/* Day 4 Summary */}
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#fff3cd', borderRadius: '8px' }}>
+        <h2>💾 Day 4: การจัดการข้อมูลด้วย Mutations</h2>
+        <ul>
+          <li>✅ useMutation: Hook สำหรับการเปลี่ยนแปลงข้อมูลบนเซิร์ฟเวอร์</li>
+          <li>✅ mutationFn: ฟังก์ชัน async สำหรับ POST, PUT, PATCH, DELETE</li>
+          <li>✅ mutate vs mutateAsync: วิธีการเรียกใช้ mutation</li>
+          <li>✅ Cache Invalidation: การอัปเดต cache หลัง mutation สำเร็จ</li>
+          <li>✅ useQueryClient: การเข้าถึง queryClient instance</li>
+          <li>✅ Form Handling: การจัดการฟอร์มและ validation</li>
+        </ul>
+        <div style={{ marginTop: '15px' }}>
+          <Link
+            to="/users"
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              backgroundColor: '#ffc107',
+              color: '#212529',
+              textDecoration: 'none',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+              marginRight: '10px'
+            }}
+          >
+            💾 ทดลอง Mutations
+          </Link>
+          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+            คลิกเพื่อทดลองสร้างผู้ใช้ใหม่และดู cache invalidation!
+          </p>
+        </div>
       </div>
 
       {/* Day 3 Summary */}
@@ -29,26 +62,6 @@ const HomePage: React.FC = () => {
           <li>✅ API Integration กับ JSONPlaceholder</li>
           <li>✅ Data Validation ด้วย Zod ใน Service Layer</li>
         </ul>
-        <div style={{ marginTop: '15px' }}>
-          <Link
-            to="/users"
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#2196f3',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              marginRight: '10px'
-            }}
-          >
-            🌐 ดูข้อมูลจาก API
-          </Link>
-          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-            คลิกเพื่อดูการทำงานของ React Query กับ real API data!
-          </p>
-        </div>
       </div>
 
       {/* Day 2 Summary */}
@@ -64,7 +77,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Key Concepts */}
-      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#fff3cd', borderRadius: '8px', border: '1px solid #ffeaa7' }}>
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
         <h3>💡 แนวคิดสำคัญ</h3>
         <div style={{ display: 'grid', gap: '15px', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
           <div>
@@ -82,6 +95,14 @@ const HomePage: React.FC = () => {
           <div>
             <h4>🔄 Query Key Strategy</h4>
             <p>Query Key เป็น unique identifier สำหรับแต่ละ query - เปลี่ยน key = เปลี่ยน query</p>
+          </div>
+          <div>
+            <h4>💾 Mutations & Cache Invalidation</h4>
+            <p>useMutation จัดการการเปลี่ยนแปลงข้อมูล พร้อม invalidateQueries เพื่ออัปเดต UI อัตโนมัติ</p>
+          </div>
+          <div>
+            <h4>📝 Form State Management</h4>
+            <p>การจัดการ form state ร่วมกับ mutation states เพื่อ UX ที่ดี</p>
           </div>
         </div>
       </div>

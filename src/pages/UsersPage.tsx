@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getUsers } from '../services/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getUsers, createUser } from '../services/api';
 import { userSchema, simpleUserSchema, safeValidateUser, safeValidateSimpleUser } from '../schemas/user.schema';
 
 // Mock data สำหรับ users (แบบง่าย)
@@ -53,6 +53,12 @@ const mockValidSimpleUser = {
 const mockInvalidSimpleUser = { ...mockValidSimpleUser, id: "1" };
 
 const UsersPage: React.FC = () => {
+  // 🚀 Day 4: State สำหรับฟอร์ม
+  const queryClient = useQueryClient(); // เข้าถึง client
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+
   // 🚀 Day 3: ใช้ useQuery เพื่อดึงข้อมูลจาก API
   const {
     data: apiUsers,
@@ -65,13 +71,31 @@ const UsersPage: React.FC = () => {
     queryFn: getUsers,   // ฟังก์ชันสำหรับดึงข้อมูล
   });
 
+  // 🚀 Day 4: useMutation สำหรับสร้างผู้ใช้ใหม่
+  const createUserMutation = useMutation({
+    mutationFn: createUser,
+    onSuccess: (newUser) => {
+      console.log('✅ User created successfully!', newUser);
+      // ทำให้ query ที่มี key 'users' เป็น stale เพื่อให้ re-fetch
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      // เคลียร์ฟอร์ม
+      setName('');
+      setEmail('');
+      setUsername('');
+    },
+    onError: (error) => {
+      console.error("❌ Failed to create user:", error);
+    }
+  });
+
   // Debug logging
   console.log('🔍 UsersPage Debug:', {
     isLoading,
     isError,
     error: error?.message,
     dataLength: apiUsers?.length,
-    isFetching
+    isFetching,
+    mutationPending: createUserMutation.isPending
   });
 
   // ทดลอง Zod Validation เมื่อ component โหลด (Day 2)
@@ -128,6 +152,40 @@ const UsersPage: React.FC = () => {
 
     console.log('\n🎉 เปิด DevTools (F12) เพื่อดูผลลัพธ์การ validate!');
   }, []);
+
+  // 🚀 Day 4: Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!name.trim() || !email.trim() || !username.trim()) {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+
+    // ข้อมูลจำลองอื่นๆ ให้ครบตาม schema
+    createUserMutation.mutate({
+      name: name.trim(),
+      email: email.trim(),
+      username: username.trim(),
+      address: {
+        street: 'N/A',
+        suite: 'N/A',
+        city: 'Bangkok',
+        zipcode: '10110',
+        geo: {
+          lat: '13.7563',
+          lng: '100.5018'
+        }
+      },
+      phone: '02-xxx-xxxx',
+      website: 'example.com',
+      company: {
+        name: 'Example Company',
+        catchPhrase: 'Innovation at its best',
+        bs: 'synergistic solutions'
+      }
+    });
+  };
 
   // Loading state
   if (isLoading) {
@@ -197,8 +255,141 @@ const UsersPage: React.FC = () => {
 
   return (
     <div>
-      <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 3</h1>
-      <p>รายการผู้ใช้จาก JSONPlaceholder API + React Query + Zod Validation</p>
+      <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 4</h1>
+      <p>รายการผู้ใช้จาก JSONPlaceholder API + React Query + Mutations</p>
+
+      {/* Day 4 Info */}
+      <div style={{
+        marginBottom: '20px',
+        padding: '15px',
+        backgroundColor: '#fff3cd',
+        borderRadius: '8px',
+        border: '1px solid #ffeaa7'
+      }}>
+        <h3>💾 Day 4: Mutations (useMutation)</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+          <span>สถานะ Mutation:</span>
+          {createUserMutation.isPending && <span style={{ color: '#007bff' }}>🔄 กำลังสร้างผู้ใช้...</span>}
+          {createUserMutation.isSuccess && <span style={{ color: '#28a745' }}>✅ สร้างผู้ใช้สำเร็จ!</span>}
+          {createUserMutation.isError && <span style={{ color: '#dc3545' }}>❌ เกิดข้อผิดพลาด</span>}
+          {createUserMutation.isIdle && <span style={{ color: '#6c757d' }}>⏸️ พร้อมใช้งาน</span>}
+        </div>
+        <p><strong>เปิด DevTools (F12)</strong> เพื่อดู:</p>
+        <ul>
+          <li>✅ POST requests และ response handling</li>
+          <li>✅ Cache invalidation และ automatic refetch</li>
+          <li>✅ Mutation states: idle, pending, success, error</li>
+          <li>✅ Form handling และ optimistic updates</li>
+        </ul>
+      </div>
+
+      {/* Day 4: Create User Form */}
+      <div style={{
+        marginBottom: '30px',
+        padding: '20px',
+        backgroundColor: '#f8f9fa',
+        borderRadius: '8px',
+        border: '1px solid #dee2e6'
+      }}>
+        <h3>➕ สร้างผู้ใช้ใหม่</h3>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>ชื่อ:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="เช่น John Doe"
+              disabled={createUserMutation.isPending}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px',
+                fontSize: '14px'
+              }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Username:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="เช่น johndoe"
+              disabled={createUserMutation.isPending}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px',
+                fontSize: '14px'
+              }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>อีเมล:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="เช่น john@example.com"
+              disabled={createUserMutation.isPending}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px',
+                fontSize: '14px'
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={createUserMutation.isPending || !name.trim() || !email.trim() || !username.trim()}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: createUserMutation.isPending ? '#6c757d' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: createUserMutation.isPending ? 'not-allowed' : 'pointer',
+              transition: 'background-color 0.3s'
+            }}
+          >
+            {createUserMutation.isPending ? '🔄 กำลังสร้าง...' : '➕ สร้างผู้ใช้'}
+          </button>
+
+          {createUserMutation.isError && (
+            <div style={{
+              padding: '10px',
+              backgroundColor: '#f8d7da',
+              color: '#721c24',
+              borderRadius: '4px',
+              border: '1px solid #f5c6cb'
+            }}>
+              ❌ เกิดข้อผิดพลาด: {createUserMutation.error?.message}
+            </div>
+          )}
+
+          {createUserMutation.isSuccess && (
+            <div style={{
+              padding: '10px',
+              backgroundColor: '#d4edda',
+              color: '#155724',
+              borderRadius: '4px',
+              border: '1px solid #c3e6cb'
+            }}>
+              ✅ สร้างผู้ใช้สำเร็จ! รายการจะอัปเดตอัตโนมัติ
+            </div>
+          )}
+        </form>
+      </div>
 
       {/* Day 3 Info */}
       <div style={{

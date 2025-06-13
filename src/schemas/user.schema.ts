@@ -49,8 +49,12 @@ export const simpleUserSchema = z.object({
   joinDate: z.string().optional(),
 });
 
+// Schema สำหรับสร้าง user ใหม่ (ไม่ต้องมี id เพราะ server จะสร้างให้)
+export const createUserSchema = userSchema.omit({ id: true });
+
 // นี่คือ DTO ของเรา! 🎉
 export type User = z.infer<typeof userSchema>;
+export type CreateUser = z.infer<typeof createUserSchema>;
 export type SimpleUser = z.infer<typeof simpleUserSchema>;
 
 // Helper functions สำหรับการ validate

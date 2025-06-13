@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { userSchema, type User } from '../schemas/user.schema';
+import { userSchema, type User, type CreateUser } from '../schemas/user.schema';
 
 const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -53,6 +53,37 @@ export async function getUser(userId: number): Promise<User> {
     return validatedUser;
   } catch (error) {
     console.error(`❌ User ${userId} validation failed:`, error);
+    throw new Error('Invalid user data format received from API');
+  }
+}
+
+// 🚀 Day 4: ฟังก์ชันสำหรับสร้างผู้ใช้ใหม่ (POST)
+export async function createUser(newUser: CreateUser): Promise<User> {
+  console.log('🌐 Creating new user:', newUser);
+
+  const res = await fetch(`${API_BASE_URL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newUser),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to create user: ${res.status} ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  console.log('📦 Created user response:', data);
+
+  try {
+    // แม้ API จะส่งข้อมูลกลับมา ควร validate ด้วย
+    // JSONPlaceholder จะ return id กลับมาด้วย เราจึงใช้ userSchema ได้
+    const validatedUser = userSchema.parse(data);
+    console.log('✅ User creation successful:', validatedUser);
+    return validatedUser;
+  } catch (error) {
+    console.error('❌ User creation validation failed:', error);
     throw new Error('Invalid user data format received from API');
   }
 }
