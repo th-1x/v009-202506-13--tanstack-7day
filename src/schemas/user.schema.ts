@@ -34,7 +34,7 @@ export const userSchema = z.object({
   email: z.string().email({ message: "Invalid email format" }),
   address: fullAddressSchema,
   phone: z.string().optional(),
-  website: z.string().url().optional(),
+  website: z.string().optional(),
   company: companySchema.optional(),
 });
 
