@@ -33,19 +33,19 @@ export async function getUsers(): Promise<User[]> {
 // ฟังก์ชันสำหรับดึงข้อมูลผู้ใช้คนเดียว
 export async function getUser(userId: number): Promise<User> {
   console.log(`🌐 Fetching user ${userId} from API...`);
-  
+
   const res = await fetch(`${API_BASE_URL}/users/${userId}`);
-  
+
   if (!res.ok) {
     if (res.status === 404) {
       throw new Error(`User with ID ${userId} not found`);
     }
     throw new Error(`Failed to fetch user: ${res.status} ${res.statusText}`);
   }
-  
+
   const data = await res.json();
   console.log(`📦 Raw API data for user ${userId}:`, data);
-  
+
   try {
     // Validate ข้อมูลที่ได้รับจาก API ด้วย Zod
     const validatedUser = userSchema.parse(data);
@@ -56,6 +56,9 @@ export async function getUser(userId: number): Promise<User> {
     throw new Error('Invalid user data format received from API');
   }
 }
+
+// 🚀 Day 5: Alias สำหรับ loader (ชื่อที่ชัดเจนกว่า)
+export const getUserById = getUser;
 
 // 🚀 Day 4: ฟังก์ชันสำหรับสร้างผู้ใช้ใหม่ (POST)
 export async function createUser(newUser: CreateUser): Promise<User> {

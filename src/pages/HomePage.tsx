@@ -5,7 +5,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>🏠 หน้าแรก (Home Page)</h1>
-      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations!</p>
+      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders!</p>
 
       {/* Day 1 Summary */}
       <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
@@ -16,6 +16,39 @@ const HomePage: React.FC = () => {
           <li>✅ createBrowserRouter: การตั้งค่า Router</li>
           <li>✅ Component พื้นฐาน: RouterProvider, Link, Outlet</li>
         </ul>
+      </div>
+
+      {/* Day 5 Summary */}
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#e8f5e8', borderRadius: '8px' }}>
+        <h2>🔗 Day 5: ผสาน React Router Loaders กับ React Query</h2>
+        <ul>
+          <li>✅ Render-as-You-Fetch vs Fetch-on-Render: ปรับปรุง UX</li>
+          <li>✅ loader function: ฟังก์ชัน async ที่ผูกกับ Route</li>
+          <li>✅ queryClient.ensureQueryData: เมธอดมหัศจรรย์สำหรับ cache</li>
+          <li>✅ useLoaderData: Hook เข้าถึงข้อมูลจาก loader</li>
+          <li>✅ กำจัด Loading states ใน Component</li>
+          <li>✅ Navigation ที่เร็วขึ้นด้วย pre-loading</li>
+        </ul>
+        <div style={{ marginTop: '15px' }}>
+          <Link
+            to="/users"
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+              marginRight: '10px'
+            }}
+          >
+            🔗 ทดลอง Router Loaders
+          </Link>
+          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+            คลิกเพื่อดู Render-as-You-Fetch pattern ในการทำงาน!
+          </p>
+        </div>
       </div>
 
       {/* Day 4 Summary */}
@@ -29,26 +62,6 @@ const HomePage: React.FC = () => {
           <li>✅ useQueryClient: การเข้าถึง queryClient instance</li>
           <li>✅ Form Handling: การจัดการฟอร์มและ validation</li>
         </ul>
-        <div style={{ marginTop: '15px' }}>
-          <Link
-            to="/users"
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#ffc107',
-              color: '#212529',
-              textDecoration: 'none',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              marginRight: '10px'
-            }}
-          >
-            💾 ทดลอง Mutations
-          </Link>
-          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-            คลิกเพื่อทดลองสร้างผู้ใช้ใหม่และดู cache invalidation!
-          </p>
-        </div>
       </div>
 
       {/* Day 3 Summary */}
@@ -103,6 +116,14 @@ const HomePage: React.FC = () => {
           <div>
             <h4>📝 Form State Management</h4>
             <p>การจัดการ form state ร่วมกับ mutation states เพื่อ UX ที่ดี</p>
+          </div>
+          <div>
+            <h4>🔗 Router Loaders Integration</h4>
+            <p>ผสาน React Router loaders กับ React Query เพื่อ pre-loading และ UX ที่ดีขึ้น</p>
+          </div>
+          <div>
+            <h4>⚡️ Render-as-You-Fetch</h4>
+            <p>Pattern ใหม่ที่โหลดข้อมูลก่อนที่ component จะ render เพื่อลด loading states</p>
           </div>
         </div>
       </div>

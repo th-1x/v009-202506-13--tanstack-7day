@@ -59,15 +59,15 @@ const UsersPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
 
-  // 🚀 Day 3: ใช้ useQuery เพื่อดึงข้อมูลจาก API
+  // 🚀 Day 5: useQuery ยังคงอยู่เพื่อจัดการ re-fetching, cache และอื่นๆ
+  // แต่ไม่ต้องกังวลเรื่อง initial loading เพราะ loader จัดการให้แล้ว!
   const {
     data: apiUsers,
-    isLoading,
     isError,
     error,
     isFetching
   } = useQuery({
-    queryKey: ['users'], // Key สำหรับ query นี้
+    queryKey: ['users'], // Key สำหรับ query นี้ (ต้องตรงกับใน loader)
     queryFn: getUsers,   // ฟังก์ชันสำหรับดึงข้อมูล
   });
 
@@ -89,13 +89,13 @@ const UsersPage: React.FC = () => {
   });
 
   // Debug logging
-  console.log('🔍 UsersPage Debug:', {
-    isLoading,
+  console.log('🔍 UsersPage Debug (Day 5):', {
     isError,
     error: error?.message,
     dataLength: apiUsers?.length,
     isFetching,
-    mutationPending: createUserMutation.isPending
+    mutationPending: createUserMutation.isPending,
+    note: 'No more isLoading - handled by loader!'
   });
 
   // ทดลอง Zod Validation เมื่อ component โหลด (Day 2)
@@ -187,45 +187,14 @@ const UsersPage: React.FC = () => {
     });
   };
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div>
-        <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 3</h1>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '20px',
-          backgroundColor: '#fff3cd',
-          borderRadius: '8px',
-          border: '1px solid #ffeaa7'
-        }}>
-          <div style={{
-            width: '20px',
-            height: '20px',
-            border: '2px solid #f3f3f3',
-            borderTop: '2px solid #3498db',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }}></div>
-          <span>🌐 กำลังโหลดข้อมูลจาก API...</span>
-        </div>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
+  // 🚀 Day 5: ไม่ต้องมี initial loading state แล้ว!
+  // Loader จัดการให้แล้ว - component จะ render เมื่อข้อมูลพร้อม
 
-  // Error state
+  // แต่ยังคง error state ไว้สำหรับ re-fetch ที่อาจล้มเหลว
   if (isError) {
     return (
       <div>
-        <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 3</h1>
+        <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 5</h1>
         <div style={{
           padding: '20px',
           backgroundColor: '#f8d7da',
@@ -233,8 +202,11 @@ const UsersPage: React.FC = () => {
           border: '1px solid #f5c6cb',
           color: '#721c24'
         }}>
-          <h3>❌ เกิดข้อผิดพลาด</h3>
+          <h3>❌ เกิดข้อผิดพลาดในการ re-fetch</h3>
           <p><strong>Error:</strong> {error?.message}</p>
+          <p style={{ fontSize: '14px', marginTop: '10px' }}>
+            หมายเหตุ: Initial loading จัดการโดย Router Loader แล้ว
+          </p>
           <button
             onClick={() => window.location.reload()}
             style={{
@@ -255,8 +227,33 @@ const UsersPage: React.FC = () => {
 
   return (
     <div>
-      <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 4</h1>
-      <p>รายการผู้ใช้จาก JSONPlaceholder API + React Query + Mutations</p>
+      <h1>👥 รายชื่อผู้ใช้ (Users Page) - Day 5</h1>
+      <p>รายการผู้ใช้จาก JSONPlaceholder API + React Query + Mutations + Router Loaders</p>
+
+      {/* Day 5 Info */}
+      <div style={{
+        marginBottom: '20px',
+        padding: '15px',
+        backgroundColor: '#e8f5e8',
+        borderRadius: '8px',
+        border: '1px solid #c3e6cb'
+      }}>
+        <h3>🔗 Day 5: React Router Loaders + React Query</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+          <span>🚀 Render-as-You-Fetch Pattern:</span>
+          <span style={{ color: '#28a745' }}>✅ ข้อมูลโหลดก่อน component render!</span>
+        </div>
+        <p><strong>เปิด DevTools (F12)</strong> เพื่อดู:</p>
+        <ul>
+          <li>✅ Router Loader logs: "🔗 Router Loader: Loading users..."</li>
+          <li>✅ ensureQueryData behavior: cache hit vs fetch</li>
+          <li>✅ ไม่มี loading spinner ใน component แล้ว!</li>
+          <li>✅ Navigation ที่เร็วขึ้นเพราะ pre-loading</li>
+        </ul>
+        <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>
+          💡 ลองไปมาระหว่างหน้า Home และ Users - สังเกตว่าไม่มี loading state แล้ว!
+        </p>
+      </div>
 
       {/* Day 4 Info */}
       <div style={{

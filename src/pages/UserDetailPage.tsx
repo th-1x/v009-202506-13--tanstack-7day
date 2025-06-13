@@ -56,16 +56,16 @@ const UserDetailPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const userIdNumber = parseInt(userId || '0');
 
-  // 🚀 Day 3: ใช้ useQuery เพื่อดึงข้อมูลผู้ใช้จาก API
+  // 🚀 Day 5: useQuery ยังคงอยู่เพื่อจัดการ re-fetching, cache และอื่นๆ
+  // แต่ไม่ต้องกังวลเรื่อง initial loading เพราะ loader จัดการให้แล้ว!
   const {
     data: user,
-    isLoading: userLoading,
     isError: userError,
     error: userErrorMessage
   } = useQuery({
-    queryKey: ['user', userIdNumber],
+    queryKey: ['user', userIdNumber], // ต้องตรงกับใน loader
     queryFn: () => getUser(userIdNumber),
-    enabled: !!userIdNumber && userIdNumber > 0, // เรียก API เมื่อมี userId ที่ถูกต้อง
+    enabled: !!userIdNumber && userIdNumber > 0,
   });
 
   // ดึงข้อมูล posts ของผู้ใช้ (เพิ่มเติม)
@@ -79,44 +79,8 @@ const UserDetailPage: React.FC = () => {
     enabled: !!user, // เรียก API เมื่อได้ข้อมูล user แล้ว
   });
 
-  // Loading state
-  if (userLoading) {
-    return (
-      <div>
-        <div style={{ marginBottom: '20px' }}>
-          <Link to="/users" style={{ color: '#007bff', textDecoration: 'none' }}>
-            ← กลับไปหน้ารายชื่อผู้ใช้
-          </Link>
-        </div>
-        <h1>👤 รายละเอียดผู้ใช้ - Day 3</h1>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '20px',
-          backgroundColor: '#fff3cd',
-          borderRadius: '8px',
-          border: '1px solid #ffeaa7'
-        }}>
-          <div style={{
-            width: '20px',
-            height: '20px',
-            border: '2px solid #f3f3f3',
-            borderTop: '2px solid #3498db',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }}></div>
-          <span>🌐 กำลังโหลดข้อมูลผู้ใช้...</span>
-        </div>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
+  // 🚀 Day 5: ไม่ต้องมี user loading state แล้ว!
+  // Loader จัดการให้แล้ว - component จะ render เมื่อข้อมูลพร้อม
 
   // Error state
   if (userError) {
@@ -154,19 +118,22 @@ const UserDetailPage: React.FC = () => {
         </Link>
       </div>
 
-      <h1>👤 รายละเอียดผู้ใช้ - Day 3</h1>
+      <h1>👤 รายละเอียดผู้ใช้ - Day 5</h1>
 
-      {/* Day 3 Info */}
+      {/* Day 5 Info */}
       <div style={{
         marginBottom: '20px',
         padding: '15px',
-        backgroundColor: '#d4edda',
+        backgroundColor: '#e8f5e8',
         borderRadius: '8px',
         border: '1px solid #c3e6cb'
       }}>
-        <h3>⚡️ Day 3: React Query Individual User</h3>
-        <p>ข้อมูลนี้ดึงจาก API โดยใช้ useQuery พร้อม dynamic query key</p>
+        <h3>🔗 Day 5: Router Loader + Dynamic Query Key</h3>
+        <p>ข้อมูลนี้ถูกโหลดโดย Router Loader ก่อนที่ component จะ render!</p>
         <p><strong>Query Key:</strong> ['user', {userIdNumber}]</p>
+        <p style={{ fontSize: '14px', color: '#666' }}>
+          💡 สังเกตว่าไม่มี loading spinner สำหรับ user data แล้ว!
+        </p>
       </div>
 
       <div style={{

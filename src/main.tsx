@@ -10,6 +10,9 @@ import HomePage from './pages/HomePage'
 import UsersPage from './pages/UsersPage'
 import UserDetailPage from './pages/UserDetailPage'
 
+// 🚀 Day 5: Import loaders
+import { createLoaders } from './pages/loaders'
+
 // สร้าง QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +23,10 @@ const queryClient = new QueryClient({
   },
 })
 
-// Configure Router
+// 🚀 Day 5: สร้าง loader instances
+const loaders = createLoaders(queryClient)
+
+// 🚀 Day 5: Configure Router with Loaders
 const router = createBrowserRouter([
   {
     path: '/',
@@ -32,11 +38,13 @@ const router = createBrowserRouter([
       },
       {
         path: '/users',
-        element: <UsersPage />
+        element: <UsersPage />,
+        loader: loaders.users, // 🔗 ผูก loader สำหรับ users
       },
       {
         path: '/users/:userId',
-        element: <UserDetailPage />
+        element: <UserDetailPage />,
+        loader: loaders.user, // 🔗 ผูก loader สำหรับ user detail
       }
     ]
   }
