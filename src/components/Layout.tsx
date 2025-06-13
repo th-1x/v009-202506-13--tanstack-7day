@@ -63,11 +63,19 @@ const Layout: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/users" 
-                style={location.pathname.startsWith('/users') ? activeLinkStyle : linkStyle}
+              <Link
+                to="/users"
+                style={location.pathname === '/users' ? activeLinkStyle : linkStyle}
               >
                 👥 ผู้ใช้
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/users/new"
+                style={location.pathname === '/users/new' ? activeLinkStyle : linkStyle}
+              >
+                📝 เพิ่มผู้ใช้
               </Link>
             </li>
           </ul>

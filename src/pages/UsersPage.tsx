@@ -88,69 +88,35 @@ const UsersPage: React.FC = () => {
     }
   });
 
-  // Debug logging
-  console.log('🔍 UsersPage Debug (Day 5):', {
-    isError,
-    error: error?.message,
-    dataLength: apiUsers?.length,
-    isFetching,
-    mutationPending: createUserMutation.isPending,
-    note: 'No more isLoading - handled by loader!'
-  });
-
-  // ทดลอง Zod Validation เมื่อ component โหลด (Day 2)
-  useEffect(() => {
-    console.log('🚀 === Day 2: DTO และการตรวจสอบข้อมูลด้วย Zod ===');
-
-    // === ทดลอง 1: Full User Schema (JSONPlaceholder format) ===
-    console.log('\n📋 ทดลองที่ 1: Full User Schema');
-
-    // ทดลอง parse ข้อมูลที่ถูกต้อง
-    try {
-      const parsedUser = userSchema.parse(mockValidUser);
-      console.log("✅ Full User Validation successful:", parsedUser);
-    } catch (error) {
-      console.error("❌ Full User Validation failed:", error);
-    }
-
-    // ทดลอง parse ข้อมูลที่ผิด
-    try {
-      userSchema.parse(mockInvalidUser);
-    } catch (error) {
-      console.error("❌ Full User Validation failed as expected (invalid email):", error);
-    }
-
-    // === ทดลอง 2: Simple User Schema ===
-    console.log('\n📋 ทดลองที่ 2: Simple User Schema');
-
-    // ทดลอง safeParse กับข้อมูลที่ถูกต้อง
-    const validResult = safeValidateSimpleUser(mockValidSimpleUser);
-    if (validResult.success) {
-      console.log("✅ Simple User Validation successful:", validResult.data);
-    } else {
-      console.error("❌ Simple User Validation failed:", validResult.error);
-    }
-
-    // ทดลอง safeParse กับข้อมูลที่ผิด
-    const invalidResult = safeValidateSimpleUser(mockInvalidSimpleUser);
-    if (invalidResult.success) {
-      console.log("✅ Simple User Validation successful:", invalidResult.data);
-    } else {
-      console.error("❌ Simple User Validation failed as expected (id should be number):", invalidResult.error.issues);
-    }
-
-    // === ทดลอง 3: Validate Mock Users ===
-    console.log('\n📋 ทดลองที่ 3: Validate Mock Users');
-    mockUsers.forEach((user, index) => {
-      const result = safeValidateSimpleUser(user);
-      if (result.success) {
-        console.log(`✅ User ${index + 1} (${user.name}) validation successful`);
-      } else {
-        console.error(`❌ User ${index + 1} (${user.name}) validation failed:`, result.error.issues);
-      }
+  // Debug logging (simplified)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 UsersPage Status:', {
+      users: apiUsers?.length || 0,
+      isFetching,
+      mutationPending: createUserMutation.isPending,
+      hasError: isError
     });
+  }
 
-    console.log('\n🎉 เปิด DevTools (F12) เพื่อดูผลลัพธ์การ validate!');
+  // ทดลอง Zod Validation เมื่อ component โหลด (Day 2) - แบบสั้นๆ
+  useEffect(() => {
+    // เรียกใช้เพียงครั้งเดียวเพื่อลดการ log ซ้ำ
+    const hasRunValidation = sessionStorage.getItem('zodValidationRun');
+    if (hasRunValidation) return;
+
+    console.log('🚀 Day 2-6 Workshop: Zod + React Query + Router Loaders + Actions');
+    console.log('📋 Validating sample data...');
+
+    // ทดลอง validation แบบสั้นๆ
+    const validResult = safeValidateSimpleUser(mockValidSimpleUser);
+    const invalidResult = safeValidateSimpleUser(mockInvalidSimpleUser);
+
+    console.log('✅ Valid user check:', validResult.success ? 'PASS' : 'FAIL');
+    console.log('❌ Invalid user check:', !invalidResult.success ? 'PASS (expected)' : 'FAIL');
+    console.log('🎉 All validation tests completed!');
+
+    // Mark as run to prevent duplicate logs
+    sessionStorage.setItem('zodValidationRun', 'true');
   }, []);
 
   // 🚀 Day 4: Handle form submission
@@ -280,6 +246,33 @@ const UsersPage: React.FC = () => {
         </ul>
       </div>
 
+      {/* Day 6: Link to New Form */}
+      <div style={{
+        marginBottom: '20px',
+        padding: '15px',
+        backgroundColor: '#f0f8ff',
+        borderRadius: '8px',
+        border: '1px solid #b3d9ff'
+      }}>
+        <h3>📝 Day 6: Advanced Form with Actions</h3>
+        <p>ลองใช้ฟอร์มขั้นสูงด้วย React Router Actions และ Zod Validation!</p>
+        <Link
+          to="/users/new"
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            marginTop: '10px'
+          }}
+        >
+          📝 สร้างผู้ใช้ใหม่ (Advanced Form)
+        </Link>
+      </div>
+
       {/* Day 4: Create User Form */}
       <div style={{
         marginBottom: '30px',
@@ -288,7 +281,7 @@ const UsersPage: React.FC = () => {
         borderRadius: '8px',
         border: '1px solid #dee2e6'
       }}>
-        <h3>➕ สร้างผู้ใช้ใหม่</h3>
+        <h3>➕ สร้างผู้ใช้ใหม่ (Day 4 - Inline Form)</h3>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>ชื่อ:</label>
@@ -420,12 +413,11 @@ const UsersPage: React.FC = () => {
         border: '1px solid #2196f3'
       }}>
         <h3>🔍 Day 2: DTO และ Zod Validation</h3>
-        <p><strong>เปิด DevTools (F12)</strong> และดูที่ Console เพื่อดูผลลัพธ์การ validate ข้อมูล!</p>
+        <p>ข้อมูลทั้งหมดผ่านการ validate ด้วย Zod schemas แล้ว</p>
         <ul>
-          <li>✅ ทดลอง Full User Schema (JSONPlaceholder format)</li>
-          <li>✅ ทดลอง Simple User Schema</li>
-          <li>✅ ทดลอง .parse() vs .safeParse()</li>
-          <li>✅ ดู Error messages ที่ละเอียด</li>
+          <li>✅ Full User Schema (JSONPlaceholder format)</li>
+          <li>✅ Simple User Schema (Mock data)</li>
+          <li>✅ Runtime validation และ TypeScript types</li>
         </ul>
       </div>
 

@@ -5,7 +5,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>🏠 หน้าแรก (Home Page)</h1>
-      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders!</p>
+      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders + Actions!</p>
 
       {/* Day 1 Summary */}
       <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
@@ -16,6 +16,39 @@ const HomePage: React.FC = () => {
           <li>✅ createBrowserRouter: การตั้งค่า Router</li>
           <li>✅ Component พื้นฐาน: RouterProvider, Link, Outlet</li>
         </ul>
+      </div>
+
+      {/* Day 6 Summary */}
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f0f8ff', borderRadius: '8px' }}>
+        <h2>📝 Day 6: จัดการฟอร์มขั้นสูงด้วย Actions และ Zod</h2>
+        <ul>
+          <li>✅ action Function: จัดการการเปลี่ยนแปลงข้อมูลหลัง form submit</li>
+          <li>✅ &lt;Form&gt; Component: Progressive Enhancement pattern</li>
+          <li>✅ request.formData(): เข้าถึงข้อมูลฟอร์มใน action</li>
+          <li>✅ Server-side Validation: Zod validation ใน action</li>
+          <li>✅ useActionData: รับ error และข้อมูลกลับจาก action</li>
+          <li>✅ useNavigation: ตรวจสอบสถานะการ submit</li>
+        </ul>
+        <div style={{ marginTop: '15px' }}>
+          <Link
+            to="/users/new"
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+              marginRight: '10px'
+            }}
+          >
+            📝 ทดลอง Advanced Form
+          </Link>
+          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+            คลิกเพื่อทดลองฟอร์มขั้นสูงด้วย Actions และ Zod validation!
+          </p>
+        </div>
       </div>
 
       {/* Day 5 Summary */}
@@ -29,26 +62,6 @@ const HomePage: React.FC = () => {
           <li>✅ กำจัด Loading states ใน Component</li>
           <li>✅ Navigation ที่เร็วขึ้นด้วย pre-loading</li>
         </ul>
-        <div style={{ marginTop: '15px' }}>
-          <Link
-            to="/users"
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '5px',
-              fontWeight: 'bold',
-              marginRight: '10px'
-            }}
-          >
-            🔗 ทดลอง Router Loaders
-          </Link>
-          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-            คลิกเพื่อดู Render-as-You-Fetch pattern ในการทำงาน!
-          </p>
-        </div>
       </div>
 
       {/* Day 4 Summary */}
@@ -124,6 +137,14 @@ const HomePage: React.FC = () => {
           <div>
             <h4>⚡️ Render-as-You-Fetch</h4>
             <p>Pattern ใหม่ที่โหลดข้อมูลก่อนที่ component จะ render เพื่อลด loading states</p>
+          </div>
+          <div>
+            <h4>📝 Progressive Enhancement</h4>
+            <p>ฟอร์มที่ทำงานได้แม้ JavaScript ปิด แต่ดีขึ้นเมื่อ JavaScript เปิด</p>
+          </div>
+          <div>
+            <h4>🎯 Server-side Actions</h4>
+            <p>จัดการ form submission และ validation ฝั่งเซิร์ฟเวอร์ด้วย React Router Actions</p>
           </div>
         </div>
       </div>
