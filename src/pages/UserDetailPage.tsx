@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getUser, getUserPosts } from '../services/api';
+import { useGetUser, useGetUserPosts } from '../hooks/useUsers';
 
 // Mock data สำหรับ users (เหมือนกับใน UsersPage)
 const mockUsers = [
@@ -56,28 +55,19 @@ const UserDetailPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const userIdNumber = parseInt(userId || '0');
 
-  // 🚀 Day 5: useQuery ยังคงอยู่เพื่อจัดการ re-fetching, cache และอื่นๆ
-  // แต่ไม่ต้องกังวลเรื่อง initial loading เพราะ loader จัดการให้แล้ว!
+  // 🚀 Day 7: ใช้ Custom Hooks แทน useQuery โดยตรง
   const {
     data: user,
     isError: userError,
     error: userErrorMessage
-  } = useQuery({
-    queryKey: ['user', userIdNumber], // ต้องตรงกับใน loader
-    queryFn: () => getUser(userIdNumber),
-    enabled: !!userIdNumber && userIdNumber > 0,
-  });
+  } = useGetUser(userIdNumber);
 
   // ดึงข้อมูล posts ของผู้ใช้ (เพิ่มเติม)
   const {
     data: posts,
     isLoading: postsLoading,
     isError: postsError
-  } = useQuery({
-    queryKey: ['user-posts', userIdNumber],
-    queryFn: () => getUserPosts(userIdNumber),
-    enabled: !!user, // เรียก API เมื่อได้ข้อมูล user แล้ว
-  });
+  } = useGetUserPosts(userIdNumber, { enabled: !!user });
 
   // 🚀 Day 5: ไม่ต้องมี user loading state แล้ว!
   // Loader จัดการให้แล้ว - component จะ render เมื่อข้อมูลพร้อม

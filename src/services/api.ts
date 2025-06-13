@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { userSchema, type User, type CreateUser } from '../schemas/user.schema';
+import { userSchema, createUserSchema } from '../schemas/user.schema';
+
+// Create types inline to avoid import issues
+type User = z.infer<typeof userSchema>;
+type CreateUser = z.infer<typeof createUserSchema>;
 
 const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
 

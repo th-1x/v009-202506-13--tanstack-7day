@@ -5,7 +5,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>🏠 หน้าแรก (Home Page)</h1>
-      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders + Actions!</p>
+      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders + Actions + Best Practices!</p>
 
       {/* Day 1 Summary */}
       <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
@@ -16,6 +16,39 @@ const HomePage: React.FC = () => {
           <li>✅ createBrowserRouter: การตั้งค่า Router</li>
           <li>✅ Component พื้นฐาน: RouterProvider, Link, Outlet</li>
         </ul>
+      </div>
+
+      {/* Day 7 Summary */}
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+        <h2>✨ Day 7: Best Practices และการ Refactor</h2>
+        <ul>
+          <li>✅ Query Key Factories: แก้ปัญหา "Magic Strings" ด้วย Autocomplete</li>
+          <li>✅ Custom Hooks: ห่อหุ้ม React Query logic ให้ใช้งานง่าย</li>
+          <li>✅ API Service Layer: จัดระเบียบการสื่อสารกับ API</li>
+          <li>✅ Component Refactoring: โค้ดสะอาดและนำกลับมาใช้ได้</li>
+          <li>✅ Error Handling Strategy: จัดการ error อย่างเป็นระบบ</li>
+          <li>✅ Production-Ready Structure: โครงสร้างพร้อมใช้งานจริง</li>
+        </ul>
+        <div style={{ marginTop: '15px' }}>
+          <Link
+            to="/users"
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+              marginRight: '10px'
+            }}
+          >
+            ✨ ดูโค้ดที่ Refactor แล้ว
+          </Link>
+          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+            คลิกเพื่อดูโค้ดที่สะอาดและเป็นระเบียบแล้ว!
+          </p>
+        </div>
       </div>
 
       {/* Day 6 Summary */}
@@ -145,6 +178,14 @@ const HomePage: React.FC = () => {
           <div>
             <h4>🎯 Server-side Actions</h4>
             <p>จัดการ form submission และ validation ฝั่งเซิร์ฟเวอร์ด้วย React Router Actions</p>
+          </div>
+          <div>
+            <h4>🏭 Query Key Factories</h4>
+            <p>แก้ปัญหา Magic Strings ด้วยการสร้าง Factory functions สำหรับ query keys</p>
+          </div>
+          <div>
+            <h4>🎣 Custom Hooks</h4>
+            <p>ห่อหุ้ม React Query logic ให้ใช้งานง่าย นำกลับมาใช้ได้ และทดสอบได้</p>
           </div>
         </div>
       </div>

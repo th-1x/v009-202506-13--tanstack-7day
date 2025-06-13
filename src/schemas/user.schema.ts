@@ -54,8 +54,10 @@ export const createUserSchema = userSchema.omit({ id: true });
 
 // นี่คือ DTO ของเรา! 🎉
 export type User = z.infer<typeof userSchema>;
-export type CreateUser = z.infer<typeof createUserSchema>;
 export type SimpleUser = z.infer<typeof simpleUserSchema>;
+
+// Export CreateUser type explicitly
+export type CreateUser = z.infer<typeof createUserSchema>;
 
 // Helper functions สำหรับการ validate
 export const validateUser = (data: unknown) => {

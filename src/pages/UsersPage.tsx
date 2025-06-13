@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUsers, createUser } from '../services/api';
+import { useGetUsers, useCreateUser } from '../hooks/useUsers';
 import { userSchema, simpleUserSchema, safeValidateUser, safeValidateSimpleUser } from '../schemas/user.schema';
 
 // Mock data สำหรับ users (แบบง่าย)
@@ -54,39 +53,29 @@ const mockInvalidSimpleUser = { ...mockValidSimpleUser, id: "1" };
 
 const UsersPage: React.FC = () => {
   // 🚀 Day 4: State สำหรับฟอร์ม
-  const queryClient = useQueryClient(); // เข้าถึง client
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
 
-  // 🚀 Day 5: useQuery ยังคงอยู่เพื่อจัดการ re-fetching, cache และอื่นๆ
-  // แต่ไม่ต้องกังวลเรื่อง initial loading เพราะ loader จัดการให้แล้ว!
+  // 🚀 Day 7: ใช้ Custom Hook แทน useQuery โดยตรง
   const {
     data: apiUsers,
     isError,
     error,
     isFetching
-  } = useQuery({
-    queryKey: ['users'], // Key สำหรับ query นี้ (ต้องตรงกับใน loader)
-    queryFn: getUsers,   // ฟังก์ชันสำหรับดึงข้อมูล
-  });
+  } = useGetUsers();
 
-  // 🚀 Day 4: useMutation สำหรับสร้างผู้ใช้ใหม่
-  const createUserMutation = useMutation({
-    mutationFn: createUser,
-    onSuccess: (newUser) => {
-      console.log('✅ User created successfully!', newUser);
-      // ทำให้ query ที่มี key 'users' เป็น stale เพื่อให้ re-fetch
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      // เคลียร์ฟอร์ม
+  // 🚀 Day 7: ใช้ Custom Hook แทน useMutation โดยตรง
+  const createUserMutation = useCreateUser();
+
+  // เพิ่ม callback สำหรับเคลียร์ฟอร์มหลังสำเร็จ
+  React.useEffect(() => {
+    if (createUserMutation.isSuccess) {
       setName('');
       setEmail('');
       setUsername('');
-    },
-    onError: (error) => {
-      console.error("❌ Failed to create user:", error);
     }
-  });
+  }, [createUserMutation.isSuccess]);
 
   // Debug logging (simplified)
   if (process.env.NODE_ENV === 'development') {

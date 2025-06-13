@@ -1,16 +1,17 @@
-// 🚀 Day 5: React Router Loaders กับ React Query Integration
+// 🚀 Day 5-7: React Router Loaders กับ React Query Integration + Query Key Factories
 import { QueryClient } from '@tanstack/react-query';
 import { getUsers, getUserById } from '../services/api';
+import { userKeys } from '../lib/queryKeys';
 
 // Factory function เพื่อความสะดวกในการส่ง queryClient เข้าไป
 export const createLoaders = (queryClient: QueryClient) => ({
   // Loader สำหรับหน้า Users List
   users: async () => {
     console.log('🔗 Router Loader: Loading users...');
-    
-    const query = { 
-      queryKey: ['users'], 
-      queryFn: getUsers 
+
+    const query = {
+      queryKey: userKeys.lists(),
+      queryFn: getUsers
     };
     
     // ensureQueryData จะ:
@@ -33,7 +34,7 @@ export const createLoaders = (queryClient: QueryClient) => ({
     }
 
     const query = {
-      queryKey: ['user', userId],
+      queryKey: userKeys.detail(userId),
       queryFn: () => getUserById(userId),
     };
     
@@ -56,7 +57,7 @@ export const createLoaders = (queryClient: QueryClient) => ({
     const { getUserPosts } = await import('../services/api');
     
     const query = {
-      queryKey: ['user-posts', userId],
+      queryKey: userKeys.posts(userId),
       queryFn: () => getUserPosts(userId),
     };
     

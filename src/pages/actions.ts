@@ -1,8 +1,9 @@
-// 🚀 Day 6: React Router Actions กับ Zod Validation
+// 🚀 Day 6-7: React Router Actions กับ Zod Validation + Query Key Factories
 import { QueryClient } from '@tanstack/react-query';
 import { redirect } from 'react-router-dom';
 import { createUser } from '../services/api';
 import { createUserSchema } from '../schemas/user.schema';
+import { userKeys } from '../lib/queryKeys';
 
 // Factory function เพื่อความสะดวกในการส่ง queryClient เข้าไป
 export const createActions = (queryClient: QueryClient) => ({
@@ -61,8 +62,8 @@ export const createActions = (queryClient: QueryClient) => ({
       const newUser = await createUser(result.data);
       console.log('✅ User created successfully:', newUser);
       
-      // ทำให้ query list เก่าลงและโหลดใหม่
-      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      // 🚀 Day 7: ใช้ Query Key Factory แทน magic string
+      await queryClient.invalidateQueries({ queryKey: userKeys.all });
       console.log('🔄 Cache invalidated');
       
       // Redirect กลับไปหน้า users list
