@@ -78,6 +78,14 @@ const Layout: React.FC = () => {
                 📝 เพิ่มผู้ใช้
               </Link>
             </li>
+            <li>
+              <Link
+                to="/showcase"
+                style={location.pathname === '/showcase' ? activeLinkStyle : linkStyle}
+              >
+                🎨 Showcase
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>

@@ -5,7 +5,28 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <h1>🏠 หน้าแรก (Home Page)</h1>
-      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders + Actions + Best Practices!</p>
+      <p>ยินดีต้อนรับสู่ Workshop React Router + Zod + React Query + Mutations + Loaders + Actions + Best Practices + Material-UI!</p>
+
+      {/* Material-UI Showcase Link */}
+      <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#e3f2fd', borderRadius: '8px' }}>
+        <h2>🎨 NEW: Material-UI Showcase</h2>
+        <p>ดูการใช้งาน Day 7 Best Practices ร่วมกับ Material-UI components!</p>
+        <Link
+          to="/showcase"
+          style={{
+            display: 'inline-block',
+            padding: '12px 24px',
+            backgroundColor: '#1976d2',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            marginTop: '10px'
+          }}
+        >
+          🎨 ดู Material-UI Showcase
+        </Link>
+      </div>
 
       {/* Day 1 Summary */}
       <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
